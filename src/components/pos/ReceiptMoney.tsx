@@ -11,12 +11,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { addInvoice } from "@/app/actions"
+import { addInvoice, GetInvoiceNo, SaveSessionDoc } from "@/app/actions"
 import { useAuth } from "@/contexts/AuthContext"
 import { defaultSession } from "@/lib/session"
+import { formatDateTime } from "@/lib/utils"
 
 export function ReceiptMoney({total,onSave}: {total: number,onSave: () => void}) {
-    const {sessionData,setSessionCartData} = useAuth()
+    const {sessionData,setSessionCartData,cartData} = useAuth()
     const router = useRouter()
     const schema = z.object({
         cash: z.string().min(1, "กรุณากรอกจำนวนเงิน"),
@@ -30,6 +31,17 @@ export function ReceiptMoney({total,onSave}: {total: number,onSave: () => void})
             change: ""
         }
     })
+    const getDocumentNumber = async () => {
+        
+        const docNo = await GetInvoiceNo()
+    // console.log(cartData)
+        const newCartData = {...cartData,items:[],total:0,isEdit:false,docNo:docNo.Data,docDate:formatDateTime(new Date())}
+    
+        localStorage.setItem('cartData', JSON.stringify(newCartData));
+        const res = await SaveSessionDoc(docNo.Data)
+    // console.log(newCartData)
+        setSessionCartData(newCartData);
+    }
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
       
@@ -46,6 +58,7 @@ export function ReceiptMoney({total,onSave}: {total: number,onSave: () => void})
            if(res){
             localStorage.removeItem('cartData');
             setSessionCartData({items: [], total: 0}) 
+            getDocumentNumber()
             onSave()
             router.refresh()
                }
