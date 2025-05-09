@@ -60,39 +60,39 @@ export function ProductGrid() {
  
   }
    
-  useEffect(() => {
-    const cartdataFromStorage = localStorage.getItem('cartData');
-    //console.log('cartdataFromStorage:', cartdataFromStorage);
-    //console.log('cartData from context:', cartData);
-    const getDocumentNumber = async () => {
-      const docNo = await GetInvoiceNo()
-      const parsedCartData = JSON.parse(localStorage.getItem('cartData')!);
-     // console.log(localStorage.getItem('cartData'))
-     // parsedCartData.docDate = formatDateTime(new Date())
-      // parsedCartData.docNo = docNo.Data
-      // parsedCartData.isEdit = false;
-      // parsedCartData.total = 0;
-      localStorage.setItem('cartData', JSON.stringify({...parsedCartData,docDate:formatDateTime(new Date()),docNo:docNo.Data,isEdit:false,total:0}));
-      setTimeout(() => {
-        setSessionCartData(parsedCartData);
-      }, 100);
-      }
-      getDocumentNumber()
-    // ดึงข้อมูลจาก localStorage เฉพาะเมื่อ context ยังไม่มี cartData
-    if (cartdataFromStorage) {
-      try {
-        const parsedCartData = JSON.parse(cartdataFromStorage);
+  // useEffect(() => {
+  //   const cartdataFromStorage = localStorage.getItem('cartData');
+  //   //console.log('cartdataFromStorage:', cartdataFromStorage);
+  //   //console.log('cartData from context:', cartData);
+  //   const getDocumentNumber = async () => {
+  //     const docNo = await GetInvoiceNo()
+  //     const parsedCartData = JSON.parse(localStorage.getItem('cartData')!);
+  //    // console.log(localStorage.getItem('cartData'))
+  //    // parsedCartData.docDate = formatDateTime(new Date())
+  //     // parsedCartData.docNo = docNo.Data
+  //     // parsedCartData.isEdit = false;
+  //     // parsedCartData.total = 0;
+  //     localStorage.setItem('cartData', JSON.stringify({...parsedCartData,docDate:formatDateTime(new Date()),docNo:docNo.Data,isEdit:false,total:0}));
+  //     setTimeout(() => {
+  //       setSessionCartData(parsedCartData);
+  //     }, 100);
+  //     }
+  //     getDocumentNumber()
+  //   // ดึงข้อมูลจาก localStorage เฉพาะเมื่อ context ยังไม่มี cartData
+  //   if (cartdataFromStorage) {
+  //     try {
+  //       const parsedCartData = JSON.parse(cartdataFromStorage);
         
-        setTimeout(() => {
-          setSessionCartData(parsedCartData);
-        }, 100);
-        console.log('Cart data loaded from localStorage');
-      } catch (error) {
-        console.error('Error loading cart data from localStorage:', error);
-      }
-    }
+  //       setTimeout(() => {
+  //         setSessionCartData(parsedCartData);
+  //       }, 100);
+  //       console.log('Cart data loaded from localStorage');
+  //     } catch (error) {
+  //       console.error('Error loading cart data from localStorage:', error);
+  //     }
+  //   }
     
-  }, []); 
+  // }, []); 
 
  
   return (

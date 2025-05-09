@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button"
 import { DoorClosed, LogOut, LucideLogOut, Settings } from "lucide-react"
 import { PosSettingDialog } from "@/components/dialogs/SettingDialog"
 import { formatDateTime, formatTime } from "@/lib/utils"
-import { SignOut,GetInvoiceNo } from "../actions"
+import { SignOut,GetInvoiceNo, getSession,SaveSessionDoc } from "../actions"
 
 export default function POSPage() {
 
@@ -35,14 +35,18 @@ export default function POSPage() {
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
   
+  
   useEffect(() => {
     const getDocumentNumber = async () => {
+      
         const docNo = await GetInvoiceNo()
        // console.log(cartData)
-       const newCartData = {...cartData,docNo:docNo.Data,docDate:formatDateTime(new Date())}
+        const newCartData = {...cartData,docNo:docNo.Data,docDate:formatDateTime(new Date())}
        
         localStorage.setItem('cartData', JSON.stringify(newCartData));
-        setSessionCartData(cartData);
+        const res = await SaveSessionDoc(docNo.Data)
+       // console.log(newCartData)
+        setSessionCartData(newCartData);
     }
     getDocumentNumber()
   }, [])

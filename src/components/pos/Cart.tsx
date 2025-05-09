@@ -64,48 +64,29 @@ const handleCancel = () => {
     }, 0);
    
   }; 
-  useEffect(() => {
-    const cartdataFromStorage = localStorage.getItem('cartData');
-    //console.log('cartdataFromStorage:', cartdataFromStorage);
-    //console.log('cartData from context:', cartData);
+  
+ useEffect(() => {
+     const cartdataFromStorage = localStorage.getItem('cartData');
+    console.log('cartdataFromStorage:', cartdataFromStorage);
+    console.log('cartData from context:', cartData);
 
-    // ดึงข้อมูลจาก localStorage เฉพาะเมื่อ context ยังไม่มี cartData
-    if (cartdataFromStorage && !cartData) {
+  //   // ดึงข้อมูลจาก localStorage เฉพาะเมื่อ context ยังไม่มี cartData
+    if (cartdataFromStorage && cartData.docNo=='') {
       try {
         const parsedCartData = JSON.parse(cartdataFromStorage);
         setTimeout(() => {
           setSessionCartData(parsedCartData);
         }, 100);
-        console.log('Cart data loaded from localStorage');
+      //  console.log('Cart data loaded from localStorage');
       } catch (error) {
         console.error('Error parsing cartData from localStorage:', error);
       }
-    }
+   }
 
    
 
-  }, [cartData, setSessionCartData]);
+   }, [cartData, setSessionCartData]);
  
-  // useEffect(() => {
-  //   const getDocumentNumber = async () => {
-  //       const docNo = await GetInvoiceNo()
-  //      // console.log(cartData)
-  //      const newCartData = {...cartData,docNo:docNo.Data,docDate:formatDateTime(new Date())}
-       
-  //       localStorage.setItem('cartData', JSON.stringify(newCartData));
-  //       setSessionCartData(cartData);
-  //   }
-  //   getDocumentNumber()
-  // }, [])
-  //const items: CartItem[] = cartData ? JSON.parse(cartData).items : []
-  //const total = cartData.items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0)
-  // useEffect(() => {
-  //   const cartdataFromStorage = localStorage.getItem('cartData');
-  //   if (cartdataFromStorage) {
-  //     const parsedCartData = JSON.parse(cartdataFromStorage);
-  //     setSessionCartData(parsedCartData);
-  //   }
-  // }, [cartData]);
 
   useEffect(() => {
     // เรียก select() บน Input เมื่อเข้าสู่โหมดแก้ไข

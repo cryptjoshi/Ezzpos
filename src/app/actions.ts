@@ -162,6 +162,12 @@ export async function SignIn(username: string, password: string, machineNumber: 
           defaultShelfcode: "01"
         }
     }   
+   
+   // const invoice = await GetInvoiceNo(data.Token)
+   // console.log(invoice)
+   // if(invoice.status)
+   // session.invoiceNo = invoice.Data
+
     await session.save()
        
     }
@@ -269,6 +275,12 @@ export async function updateSettings(posid:string,data:z.infer<typeof formSchema
    // await session.save()
     return res
 }
+export async function SaveSessionDoc(docno:string){
+    const session = await getSession()
+    session.invoiceNo = docno;
+    await session.save()
+    return {status:true,Data:docno}
+}
 export async function  GetInvoiceNo(){
  
     const session = await getSession();
@@ -277,12 +289,38 @@ export async function  GetInvoiceNo(){
         throw new Error('API token not found');
       }
     // const state = useAuthStore()
+    //const access_token = session.apiToken?session.apiToken:token
+   
   
     const response = await fetch(`${API_ENDPOINTS.getInvoiceNo}`, { method: 'POST',
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' +  session.apiToken
+          },
+          body: JSON.stringify({"posid":session.settings?.machineNumber,"docformat":session.settings?.defaultDocno})
+        })
+        return response.json();
+         
+         
+       
+  }
+export async function  GetInvoiceNoX(token:string){
+ 
+    const session = await getSession();
+    //const plainSession = JSON.parse(JSON.stringify(session));
+    if (!session.apiToken && !token) {
+        throw new Error('API token not found');
+      }
+    // const state = useAuthStore()
+    const access_token = session.apiToken?session.apiToken:token
+   
+  
+    const response = await fetch(`${API_ENDPOINTS.getInvoiceNo}`, { method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' +  access_token
           },
           body: JSON.stringify({"posid":session.settings?.machineNumber,"docformat":session.settings?.defaultDocno})
         })

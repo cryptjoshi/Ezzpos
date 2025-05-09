@@ -20,6 +20,7 @@ export interface SessionData {
    userData?: any;
    settings?: Settings;
    isLoggedIn: boolean;
+   invoiceNo: string;
    cartData?: CartData;
 }
 
@@ -35,6 +36,7 @@ export interface CartData {
 
 export const defaultSession: SessionData = {
    isLoggedIn: false,
+   invoiceNo: '',
    cartData: {
     items: [],
     total: 0,
