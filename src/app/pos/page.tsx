@@ -7,7 +7,7 @@ import { MenuBar } from "@/components/pos/MenuBar"
 import ProtectedRoute from "@/components/auth/ProtectedRoute"
 import { useAuth } from "@/contexts/AuthContext"
 import { ReceiptDialog } from "@/components/dialogs/ReceiptDialog"
-import { useEffect, useState } from "react"
+import React, { Component, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { DoorClosed, LogOut, LucideLogOut, Settings } from "lucide-react"
 import { PosSettingDialog } from "@/components/dialogs/SettingDialog"
@@ -35,21 +35,30 @@ export default function POSPage() {
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
   
-  
-  useEffect(() => {
-    const getDocumentNumber = async () => {
+  const getDocumentNumber = async () => {
       
-        const docNo = await GetInvoiceNo()
-       // console.log(cartData)
-        const newCartData = {...cartData,docNo:docNo.Data,docDate:formatDateTime(new Date())}
-       
-        localStorage.setItem('cartData', JSON.stringify(newCartData));
-        const res = await SaveSessionDoc(docNo.Data)
-       // console.log(newCartData)
-        setSessionCartData(newCartData);
-    }
+    const docNo = await GetInvoiceNo()
+   // console.log(cartData)
+    const newCartData = {...cartData,items:[],total:0,isEdit:false,docNo:docNo.Data,docDate:formatDateTime(new Date())}
+   
+    localStorage.setItem('cartData', JSON.stringify(newCartData));
+    const res = await SaveSessionDoc(docNo.Data)
+   // console.log(newCartData)
+    setSessionCartData(newCartData);
+}
+
+  useEffect(() => {
+   
     getDocumentNumber()
   }, [])
+
+
+  const showComponent= (id:number,component:React.ReactNode) =>{
+    if(id==1){
+      getDocumentNumber()
+    } 
+    setComponent(component)
+  }
 
 
   return (
@@ -86,7 +95,7 @@ export default function POSPage() {
         <main className="container mx-auto px-4 py-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 space-y-4">
-              <MenuBar selectedMenu={selectedMenu} onSelect={(id: number) => {setSelectedMenu(id)}} setComponent={(component: React.ReactNode) => {setComponent(component)}} />
+              <MenuBar selectedMenu={selectedMenu} onSelect={(id: number) => {setSelectedMenu(id)}} setComponent={(id:number,component: React.ReactNode) => showComponent(id,component)} />
               {/* <ProductGrid /> */}
               {component}
             </div>

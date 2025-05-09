@@ -16,7 +16,7 @@ const categories = [
 ]
 
 
-export function MenuBar({onSelect,setComponent,selectedMenu}: {onSelect: (id: number) => void,setComponent: (component: React.ReactNode) => void,selectedMenu: number}) {
+export function MenuBar({onSelect,setComponent,selectedMenu}: {onSelect: (id: number) => void,setComponent: (id:number,component: React.ReactNode) => void,selectedMenu: number}) {
 
   
 
@@ -28,7 +28,7 @@ export function MenuBar({onSelect,setComponent,selectedMenu}: {onSelect: (id: nu
             key={category.id}
             variant="outline"
             className={cn("whitespace-nowrap ", selectedMenu === category.id ? "bg-primary text-primary-foreground" : "")}
-            onClick={() => {onSelect(category.id);setComponent(category.Component)}}
+            onClick={() => {onSelect(category.id);setComponent(category.id,category.Component)}}
           >
             {category.label}
           </Button>
